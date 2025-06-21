@@ -34,12 +34,13 @@ while True:
     r = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={api_key}")
     if not r.ok:
         print("invalid input")
+        continue
     data = r.json()
     weather = data['weather'][0]
     main = data['main']
     lat = data['coord']['lat']
     lon = data['coord']['lon']
-
+    wind = data['wind']
     tz_r = requests.get(f"https://timeapi.io/api/TimeZone/coordinate?latitude={lat}&longitude={lon}")
     if not tz_r:
         print("Something went wrong")
@@ -49,4 +50,10 @@ while True:
     icon = icons[weather['main']]
     intro = f"{icon}   Weather in {city} {local_time}"
     print(f"{intro}\n{'-'*len(intro)}")
-
+    print(f"🌡️\tTemperature\t: {main['temp']}°C")
+    print(f"🌡️\tFeels Like\t: {main['feels_like']}°C")
+    print(f"{icon}\tCondition\t: {weather['main']}")
+    print(f"💧\tHumidity\t: {main['humidity']}%")
+    print(f"💨\tWind Speed\t: {wind['speed']} m/s")
+    print(f"🧭\tWind Direction\t: {wind['deg']}°N")
+    print(f"📍\tCoordinates\t: {lat}°E {lon}°N")
